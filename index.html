@@ -19,7 +19,7 @@ const total=20,book=document.querySelector('#book'),main=document.querySelector(
 for(let i=1;i<=total;i++){let page=document.createElement('div');page.className='page';page.innerHTML=`<img src="pages/page-${String(i).padStart(2,'0')}.jpg" alt="Zine page ${i}" draggable="false">`;book.appendChild(page)}
 if(!window.St){book.hidden=true;document.querySelector('#error').hidden=false}else{
 const size=Math.max(100,Math.min(620,main.clientHeight-36,(main.clientWidth-40)/(main.clientWidth<650?1:2)));
-const flip=new St.PageFlip(book,{width:size,height:size,size:'stretch',minWidth:300,maxWidth:800,minHeight:300,maxHeight:800,showCover:true,usePortrait:true,autoSize:true,maxShadowOpacity:.25,mobileScrollSupport:false,flippingTime:750});
+const flip=new St.PageFlip(book,{width:size,height:size,size:'stretch',minWidth:150,maxWidth:800,minHeight:150,maxHeight:800,showCover:true,usePortrait:true,autoSize:true,maxShadowOpacity:.25,mobileScrollSupport:false,flippingTime:750});
 flip.loadFromHTML(document.querySelectorAll('.page'));
 const prev=document.querySelector('#prev'),next=document.querySelector('#next'),count=document.querySelector('#count');
 function update(){let n=flip.getCurrentPageIndex();let single=flip.getOrientation()==='portrait'||n===0||n===total-1;count.textContent=single?`${n+1} / ${total}`:`${n+1}–${Math.min(n+2,total)} / ${total}`;prev.disabled=n===0;next.disabled=n>=total-1}
