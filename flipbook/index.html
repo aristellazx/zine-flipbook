@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Aristella — Zine</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;font-family:Arial,sans-serif;background:transparent;color:#272727}body{display:flex;flex-direction:column;overflow:hidden}main{width:min(100%,calc((100dvh - 130px)*2 + 40px));align-self:center;flex:1;min-height:0;display:flex;align-items:center;justify-content:center;padding:24px 20px 10px;overflow:hidden}#book{margin:auto}.page{background:white;overflow:hidden}.page img{width:100%;height:100%;display:block;object-fit:contain}.toolbar{display:flex;justify-content:center;align-items:center;gap:14px;min-height:64px;padding:12px;flex-wrap:wrap}button,a{border:1px solid #ddd;background:#fff;color:#272727;padding:10px 14px;border-radius:30px;text-decoration:none;font-size:13px;cursor:pointer}button:hover,a:hover{background:#eee}button:focus-visible,a:focus-visible{outline:2px solid #555;outline-offset:3px}button:disabled{opacity:.3;cursor:default}#count{font-size:12px;min-width:74px;text-align:center}.hint{text-align:center;font-size:11px;color:#777;margin:0 0 8px}dialog{border:0;padding:0;background:#fff;max-width:94vw;max-height:92vh}dialog::backdrop{background:#000b}dialog img{display:block;width:min(88vw,1000px);max-height:84vh;object-fit:contain}dialog button{position:absolute;top:8px;right:8px}#error{padding:20px;text-align:center}@media(max-width:600px){main{padding:16px 8px 4px}.toolbar{gap:7px}button,a{padding:9px 11px}}
+</style>
+<main><div id="book" aria-label="Interactive zine"></div><div id="error" hidden>Unable to load the flipbook. <a href="magazine.pdf">Open PDF</a></div></main>
+<nav class="toolbar" aria-label="Flipbook controls"><button id="prev" aria-label="Previous pages">←</button><span id="count" aria-live="polite"></span><button id="next" aria-label="Next pages">→</button><button id="zoom">View page</button><button id="full">Fullscreen</button><a href="magazine.pdf" target="_blank" rel="noopener">PDF ↗</a></nav><p class="hint">Drag a corner, swipe, or use the arrows</p>
+<dialog id="detail"><button id="close" aria-label="Close page view">Close ×</button><img id="large" alt="Enlarged zine page"></dialog>
+<script src="vendor/page-flip.js"></script><script>
+const total=20,book=document.querySelector('#book'),main=document.querySelector('main');
+for(let i=1;i<=total;i++){let page=document.createElement('div');page.className='page';page.innerHTML=`<img src="pages/page-${String(i).padStart(2,'0')}.jpg" alt="Zine page ${i}" draggable="false">`;book.appendChild(page)}
+if(!window.St){book.hidden=true;document.querySelector('#error').hidden=false}else{
+const size=Math.max(100,Math.min(620,main.clientHeight-36,(main.clientWidth-40)/(main.clientWidth<650?1:2)));
+const flip=new St.PageFlip(book,{width:size,height:size,size:'stretch',minWidth:300,maxWidth:800,minHeight:300,maxHeight:800,showCover:true,usePortrait:true,autoSize:true,maxShadowOpacity:.25,mobileScrollSupport:false,flippingTime:750});
+flip.loadFromHTML(document.querySelectorAll('.page'));
+const prev=document.querySelector('#prev'),next=document.querySelector('#next'),count=document.querySelector('#count');
+function update(){let n=flip.getCurrentPageIndex();let single=flip.getOrientation()==='portrait'||n===0||n===total-1;count.textContent=single?`${n+1} / ${total}`:`${n+1}–${Math.min(n+2,total)} / ${total}`;prev.disabled=n===0;next.disabled=n>=total-1}
+flip.on('flip',update);flip.on('changeOrientation',update);update();prev.onclick=()=>flip.flipPrev();next.onclick=()=>flip.flipNext();
+const detail=document.querySelector('#detail');document.querySelector('#zoom').onclick=()=>{let n=flip.getCurrentPageIndex();document.querySelector('#large').src=`pages/page-${String(n+1).padStart(2,'0')}.jpg`;detail.showModal()};document.querySelector('#close').onclick=()=>detail.close();detail.addEventListener('click',e=>{if(e.target===detail)detail.close()});
+document.addEventListener('keydown',e=>{if(detail.open)return;if(e.key==='ArrowLeft'){e.preventDefault();flip.flipPrev()}if(e.key==='ArrowRight'){e.preventDefault();flip.flipNext()}});
+const full=document.querySelector('#full');full.onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen()}catch{full.textContent='Fullscreen unavailable'}};
+if(!document.fullscreenEnabled)full.hidden=true;
+document.addEventListener('fullscreenchange',()=>{full.textContent=document.fullscreenElement?'Exit fullscreen':'Fullscreen'});
+}
+</script></html>
