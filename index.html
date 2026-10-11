@@ -30,8 +30,20 @@ const total=20,book=document.querySelector('#book'),main=document.querySelector(
 for(let i=1;i<=total;i++){let page=document.createElement('div');page.className='page';page.innerHTML=`<img src="pages/page-${String(i).padStart(2,'0')}.jpg" alt="Zine page ${i}" draggable="false">`;book.appendChild(page)}
 if(!window.St){book.hidden=true;document.querySelector('#error').hidden=false}else{
 const size=Math.max(100,Math.min(620,main.clientHeight-12,main.clientWidth-8));
-const flip=new St.PageFlip(book,{width:size,height:size,size:'stretch',minWidth:100,maxWidth:800,minHeight:100,maxHeight:800,showCover:true,usePortrait:true,autoSize:true,maxShadowOpacity:.25,mobileScrollSupport:true,flippingTime:750});
+const flip=new St.PageFlip(book,{width:size,height:size,size:'stretch',minWidth:100,maxWidth:800,minHeight:100,maxHeight:800,showCover:true,usePortrait:true,autoSize:true,maxShadowOpacity:.25,mobileScrollSupport:true,flippingTime:750,disableFlipByClick: true,});
 flip.loadFromHTML(document.querySelectorAll('.page'));
+  book.addEventListener('click', (event) => {
+  if (flip.getState() !== 'read') return;
+
+  const bounds = book.getBoundingClientRect();
+  const tappedLeft = event.clientX < bounds.left + bounds.width / 2;
+
+  if (tappedLeft && flip.getCurrentPageIndex() > 0) {
+    flip.flipPrev();
+  } else {
+    flip.flipNext();
+  }
+});
   setTimeout(() => {
   if (flip.getCurrentPageIndex() === 0) {
     flip.flipNext();
