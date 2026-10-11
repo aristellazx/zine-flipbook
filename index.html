@@ -2,17 +2,14 @@
 <html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Aristella — Zine</title>
 <style>
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;font-family:Arial,sans-serif;background:transparent;color:#272727}body{display:flex;flex-direction:column;overflow:hidden}main{width:min(100%,calc((100dvh - 130px)*2 + 40px));align-self:center;flex:1;min-height:0;display:flex;align-items:center;justify-content:center;padding:24px 20px 10px;overflow:hidden}#book{margin:auto}.page{background:white;overflow:hidden}.page img{width:100%;height:100%;display:block;object-fit:contain}.toolbar{display:flex;justify-content:center;align-items:center;gap:14px;min-height:64px;padding:12px;flex-wrap:wrap}button,a{border:1px solid #ddd;background:#fff;color:#272727;padding:10px 14px;border-radius:30px;text-decoration:none;font-size:13px;cursor:pointer}button:hover,a:hover{background:#eee}button:focus-visible,a:focus-visible{outline:2px solid #555;outline-offset:3px}button:disabled{opacity:.3;cursor:default}#count{font-size:12px;min-width:74px;text-align:center}.hint{text-align:center;font-size:11px;color:#777;margin:0 0 8px}dialog{border:0;padding:0;background:#fff;max-width:94vw;max-height:92vh}dialog::backdrop{background:#000b}dialog img{display:block;width:min(88vw,1000px);max-height:84vh;object-fit:contain}dialog button{position:absolute;top:8px;right:8px}#error{padding:20px;text-align:center}@media(max-width:600px){main{padding:16px 8px 4px}.toolbar{gap:7px}button,a{padding:9px 11px}}
-.stf__item {
-  overflow: hidden;
+  
 }
-
-.page img {
-  width: calc(100% + 2px);
+  .page img {
+  width: 100%;
+  height: 100%;
   max-width: none;
-  margin-left: -1px;
-  .stf__item.--right {
-  margin-left: -1px;
-}
+  margin: 0;
+  object-fit: fill;
 }
 </style>
 <main><div id="book" aria-label="Interactive zine"></div><div id="error" hidden>Unable to load the flipbook. <a href="magazine.pdf">Open PDF</a></div></main>
